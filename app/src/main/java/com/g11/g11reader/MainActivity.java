@@ -2,17 +2,21 @@ package com.g11.g11reader;
 
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import com.g11.g11reader.backend.Backend;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -90,8 +94,17 @@ public class MainActivity extends AppCompatActivity {
     //};
 
     private GestureDetectorCompat mDetector;
-
     private Canvas currentCanvas;
+    private Backend backend;
+
+    private final Runnable mainRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+
+            hide();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +130,11 @@ public class MainActivity extends AppCompatActivity {
         // while interacting with the UI.
         //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
-        mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+        Thread mainLoop = new MainLoop(this);
+        mainLoop.start();
+
+        mDetector = new GestureDetectorCompat(this,
+                new MyGestureListener(this, getWindowManager().getDefaultDisplay()));
     }
 
     @Override
@@ -189,18 +206,70 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public synchronized void setCanvas(Canvas canvas) {
+        currentCanvas = canvas;
+    }
+
+    public synchronized Canvas getCanvas() {
+        return currentCanvas;
+    }
+
+    public synchronized Backend getBackend() {
+        return backend;
+    }
+
+    class MainLoop extends Thread {
+        private MainActivity ma;
+
+        private long previousMillis;
+
+        public MainLoop(MainActivity ma) {
+            super();
+            this.ma = ma;
+        }
+
+        @Override
+        public void run() {
+            while((backend == null) || (backend.getState() != Backend.BackendState.QUITTING)) {
+                previousMillis = System.currentTimeMillis();
+
+                try {
+                    sleep(100);
+                } catch (InterruptedException e) {
+                }
+
+                if(ma.getBackend()!=null) {
+                    Backend be = ma.getBackend();
+                    be.update(System.currentTimeMillis()-previousMillis);
+                    ma.setCanvas(be.getFrame());
+                }
+            }
+        }
+    }
 
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-        private static final String DEBUG_TAG = "Gestures";
+        private MainActivity ma;
+        private Display display;
+
+        private static final float minVel = 0;
+
+        public MyGestureListener(MainActivity ma, Display display) {
+            super();
+            this.ma = ma;
+            this.display = display;
+        }
 
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            final float minVel = 0;
-            if(velocityX > minVel) {
-                Log.d(DEBUG_TAG, "swiped right.");
-            } else if(velocityY < (-minVel)) {
-                Log.d(DEBUG_TAG, "swiped left.");
+
+            Backend be = ma.getBackend();
+            if(be != null) {
+                if(velocityX > minVel) {
+                    be.swipedRight();
+                } else if(velocityY < (-minVel)) {
+                    be.swipedLeft();
+                }
             }
             return true;
         }
@@ -213,7 +282,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
-            Log.d(DEBUG_TAG, "tapped x:" + event.getX() + " y:" + event.getY());
+            Backend be = ma.getBackend();
+            if(be != null) {
+                Point size = new Point();
+                display.getSize(size);
+                be.pressed((event.getX()/(float)size.x), (event.getY()/(float)size.y));
+            }
             return true;
         }
     }
