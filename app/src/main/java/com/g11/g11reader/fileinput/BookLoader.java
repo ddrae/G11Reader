@@ -1,6 +1,6 @@
-package com.g11.g11reader.com.g11.reader.fileinput;
+package com.g11.g11reader.fileinput;
 
-import com.g11.g11reader.com.g11.g11reader.backend.Book;
+import com.g11.g11reader.backend.Book;
 
 import java.io.File;
 

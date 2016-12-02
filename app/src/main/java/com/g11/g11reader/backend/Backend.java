@@ -1,4 +1,4 @@
-package com.g11.g11reader.com.g11.g11reader.backend;
+package com.g11.g11reader.backend;
 
 import android.graphics.Canvas;
 
