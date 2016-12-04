@@ -14,9 +14,11 @@ public class Book {
     private List<Bitmap> images;
     private List<Movie> animations;
     private List<MediaPlayer> sounds;
-    private Page pages;
+
+    private List<Page> pages;
+    private MediaData data;
 
     Book() {
-        pages = new Page();
+        data = new MediaData();
     }
 }
