@@ -1,8 +1,14 @@
 package com.g11.g11reader;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +17,28 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.g11.g11reader.backend.Backend;
+import com.g11.g11reader.backend.Book;
+import com.g11.g11reader.fileinput.BookLoader;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static android.R.id.list;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -100,8 +122,6 @@ public class MainActivity extends AppCompatActivity {
     private final Runnable mainRunnable = new Runnable() {
         @Override
         public void run() {
-
-
             hide();
         }
     };
@@ -129,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+        updateFileList();
 
         Thread mainLoop = new MainLoop(this);
         mainLoop.start();
@@ -196,14 +218,58 @@ public class MainActivity extends AppCompatActivity {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
-    private void updateView() {
+    public void restart() {
+        Intent i = getBaseContext().getPackageManager()
+                .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+    }
+
+    public void updateView() {
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        ImageView imageView = (ImageView) findViewById(R.id.fullscreen_content);
+        ListView listView = (ListView) findViewById(R.id.fileList);
+
+        listView.setEnabled(false);
+        listView.setVisibility(View.INVISIBLE);
         if(currentCanvas == null) {
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.INVISIBLE);
         } else {
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.INVISIBLE);
+            imageView.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void updateFileList() {
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+        ImageView imageView = (ImageView) findViewById(R.id.fullscreen_content);
+        imageView.setVisibility(View.INVISIBLE);
+
+        ListView listview = (ListView) findViewById(R.id.fileList);
+
+        ArrayList<String> listElements = new ArrayList<>();
+        listElements.add("DEFAULT_TEST");
+
+        FilenameFilter g11Filter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".g11");
+            }
+        };
+
+        File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        if(folder.listFiles()!=null) {
+            File[] files = folder.listFiles(g11Filter);
+            for (int i = 0; i < files.length; i++) {
+                listElements.add(files[i].getName().substring(0,-4));
+            }
+        }
+
+        listview.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_1, listElements));
+
+        listview.setOnItemClickListener(new FileItemClickListener(this));
     }
 
     public synchronized void setCanvas(Canvas canvas) {
@@ -212,6 +278,10 @@ public class MainActivity extends AppCompatActivity {
 
     public synchronized Canvas getCanvas() {
         return currentCanvas;
+    }
+
+    public synchronized void setBackend(Backend backend) {
+        this.backend = backend;
     }
 
     public synchronized Backend getBackend() {
@@ -241,13 +311,19 @@ public class MainActivity extends AppCompatActivity {
                 if(ma.getBackend()!=null) {
                     Backend be = ma.getBackend();
                     be.update(System.currentTimeMillis()-previousMillis);
-                    ma.setCanvas(be.getFrame());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //ma.setCanvas(be.getFrame());
+                            ma.updateView();
+                        }
+                    });
                 }
             }
         }
     }
 
-    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         private MainActivity ma;
         private Display display;
 
@@ -274,12 +350,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        //@Override
-        //public boolean onSingleTapConfirmed(MotionEvent event) {
-        //    Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
-        //    return true;
-        //}
-
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
             Backend be = ma.getBackend();
@@ -288,6 +358,64 @@ public class MainActivity extends AppCompatActivity {
                 display.getSize(size);
                 be.pressed((event.getX()/(float)size.x), (event.getY()/(float)size.y));
             }
+            return true;
+        }
+    }
+
+    private class FileItemClickListener implements AdapterView.OnItemClickListener {
+        private MainActivity ma;
+        private boolean used = false;
+
+        public FileItemClickListener(MainActivity ma) {
+            super();
+            this.ma = ma;
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if(!used) {
+                used = true;
+                final String item = (String) parent.getItemAtPosition(position);
+                ma.updateView();
+
+                if(item.equals("DEFAULT_TEST")) {
+                    ma.setBackend(new Backend(new Book()));
+                } else {
+                    String path = Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DOWNLOADS).toString() + "/" + item + ".g11";
+                    File file = new File(path);
+                    Book book = BookLoader.loadBook(file);
+                    ma.setBackend(new Backend(book));
+                }
+
+                Canvas canvas = new Canvas();
+
+                ma.setCanvas(new Canvas());
+            }
+        }
+    }
+
+    private class StableArrayAdapter extends ArrayAdapter<String> {
+
+        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+        public StableArrayAdapter(Context context, int layoutResourceId,
+                                  int textViewResourceId,
+                                  List<String> objects) {
+            super(context, layoutResourceId, textViewResourceId,  objects);
+            for (int i = 0; i < objects.size(); ++i) {
+                mIdMap.put(objects.get(i), i);
+            }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            String item = getItem(position);
+            return mIdMap.get(item);
+        }
+
+        @Override
+        public boolean hasStableIds() {
             return true;
         }
     }

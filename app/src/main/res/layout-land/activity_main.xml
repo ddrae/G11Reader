@@ -16,6 +16,12 @@
         android:gravity="center"
         android:keepScreenOn="true" />
 
+    <ListView
+        android:id="@+id/fileList"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+    </ListView>
+
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
