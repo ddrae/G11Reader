@@ -14,4 +14,9 @@ public class Book {
     private List<Bitmap> images;
     private List<Movie> animations;
     private List<MediaPlayer> sounds;
+    private Page pages;
+
+    Book() {
+        pages = new Page();
+    }
 }

@@ -3,7 +3,7 @@ package com.g11.g11reader.backend;
 import android.graphics.Canvas;
 
 /**
- * Created by Allea10 on 2016-11-30.
+ * Created by A on 2016-11-30.
  */
 
 public class Backend {
