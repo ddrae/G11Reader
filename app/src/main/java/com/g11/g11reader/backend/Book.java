@@ -18,7 +18,7 @@ public class Book {
     private List<Page> pages;
     private MediaData data;
 
-    Book() {
+    public Book() {
         data = new MediaData();
     }
 }
