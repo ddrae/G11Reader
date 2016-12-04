@@ -1,14 +1,13 @@
 package com.g11.g11reader;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,16 +16,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.g11.g11reader.backend.Backend;
 import com.g11.g11reader.backend.Book;
@@ -37,8 +33,6 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static android.R.id.list;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -116,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     //};
 
     private GestureDetectorCompat mDetector;
-    private Canvas currentCanvas;
+    private Bitmap currentFrame;
     private Backend backend;
 
     private final Runnable mainRunnable = new Runnable() {
@@ -232,11 +226,12 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setEnabled(false);
         listView.setVisibility(View.INVISIBLE);
-        if(currentCanvas == null) {
+        if(currentFrame == null) {
             progressBar.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.INVISIBLE);
         } else {
             progressBar.setVisibility(View.INVISIBLE);
+            imageView.setImageBitmap(currentFrame);
             imageView.setVisibility(View.VISIBLE);
         }
     }
@@ -262,8 +257,8 @@ public class MainActivity extends AppCompatActivity {
         File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         if(folder.listFiles()!=null) {
             File[] files = folder.listFiles(g11Filter);
-            for (int i = 0; i < files.length; i++) {
-                listElements.add(files[i].getName().substring(0,-4));
+            for (File f : files) {
+                listElements.add(f.getName().substring(0,-4));
             }
         }
 
@@ -272,12 +267,12 @@ public class MainActivity extends AppCompatActivity {
         listview.setOnItemClickListener(new FileItemClickListener(this));
     }
 
-    public synchronized void setCanvas(Canvas canvas) {
-        currentCanvas = canvas;
+    public synchronized void setFrame(Bitmap frame) {
+        currentFrame = frame;
     }
 
-    public synchronized Canvas getCanvas() {
-        return currentCanvas;
+    public synchronized Bitmap getFrame() {
+        return currentFrame;
     }
 
     public synchronized void setBackend(Backend backend) {
@@ -288,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
         return backend;
     }
 
-    class MainLoop extends Thread {
+    private class MainLoop extends Thread {
         private MainActivity ma;
 
         private long previousMillis;
@@ -306,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     sleep(100);
                 } catch (InterruptedException e) {
+                    Log.e("MainLoop", "Main loop interrupted.");
                 }
 
                 if(ma.getBackend()!=null) {
@@ -314,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //ma.setCanvas(be.getFrame());
+                            ma.setFrame(ma.getBackend().getFrame());
                             ma.updateView();
                         }
                     });
@@ -387,36 +383,7 @@ public class MainActivity extends AppCompatActivity {
                     Book book = BookLoader.loadBook(file);
                     ma.setBackend(new Backend(book));
                 }
-
-                Canvas canvas = new Canvas();
-
-                ma.setCanvas(new Canvas());
             }
-        }
-    }
-
-    private class StableArrayAdapter extends ArrayAdapter<String> {
-
-        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
-
-        public StableArrayAdapter(Context context, int layoutResourceId,
-                                  int textViewResourceId,
-                                  List<String> objects) {
-            super(context, layoutResourceId, textViewResourceId,  objects);
-            for (int i = 0; i < objects.size(); ++i) {
-                mIdMap.put(objects.get(i), i);
-            }
-        }
-
-        @Override
-        public long getItemId(int position) {
-            String item = getItem(position);
-            return mIdMap.get(item);
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
         }
     }
 }

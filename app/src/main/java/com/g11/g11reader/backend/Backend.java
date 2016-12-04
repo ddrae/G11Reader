@@ -1,5 +1,6 @@
 package com.g11.g11reader.backend;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 /**
@@ -7,7 +8,7 @@ import android.graphics.Canvas;
  */
 
 public class Backend {
-    private Canvas currentFrame;
+    private Bitmap currentFrame;
     private BackendState state;
 
     public Backend(Book book) {
@@ -20,12 +21,12 @@ public class Backend {
     public void update(long dt) {
     }
 
-    public synchronized Canvas getFrame() {
+    public synchronized Bitmap getFrame() {
         return null;
     }
 
-    protected synchronized void setCurrentFrame(Canvas canvas) {
-        currentFrame = canvas;
+    protected synchronized void setCurrentFrame(Bitmap frame) {
+        currentFrame = frame;
     }
 
     /**
