@@ -1,9 +1,6 @@
 package com.g11.g11reader.backend;
 
-import android.graphics.Bitmap;
-import android.graphics.Movie;
-import android.media.MediaPlayer;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,14 +8,10 @@ import java.util.List;
  */
 
 public class Book {
-    private List<Bitmap> images;
-    private List<Movie> animations;
-    private List<MediaPlayer> sounds;
-
-    private List<Page> pages;
-    private MediaData data;
+    private List<Page> pages = new ArrayList<>();
+    private MediaData data = new MediaData();
 
     public Book() {
-        data = new MediaData();
+
     }
 }
