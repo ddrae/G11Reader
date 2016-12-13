@@ -3,6 +3,7 @@ package com.g11.g11reader.backend;
 import android.graphics.Canvas;
 
 import com.g11.g11reader.backend.effects.GoToPageEffect;
+import com.g11.g11reader.backend.elements.TextElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,13 @@ public class Book {
 
     private int currentPage = 0;
 
+    // Demo constructor for testing purposes.
     public Book() {
-        pages.add(new Page(new ArrayList<Element>()));
+        List<Element> elements = new ArrayList<>();
+        elements.add(new TextElement("En test text! \n Hello World!", 600, 600));
+        Page page = new Page(elements);
+        pages.add(page);
+
     }
 
     public Book(List<Page> pages, MediaData data) {
