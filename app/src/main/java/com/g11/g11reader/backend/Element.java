@@ -8,7 +8,9 @@ import android.graphics.Canvas;
 
 public interface Element {
 
-    public void update(long dt, Canvas canvas, MediaData data);
+    public void update(long dt, MediaData data);
 
-    public void press(int x, int y);
+    public void draw(Canvas canvas, MediaData data);
+
+    public Effect press(int x, int y, MediaData data);
 }

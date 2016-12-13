@@ -20,35 +20,34 @@ public class MediaData {
     private Map<String, Boolean> flags = new HashMap<>();
 
     public MediaData() {
-
     }
 
-    public Map<String, Boolean> getFlags() {
-        return flags;
+    public Boolean getFlag(String name) {
+        return flags.get(name);
     }
 
-    public void setFlags(Map<String, Boolean> flags) {
-        this.flags = flags;
+    public void setFlag(String name, Boolean value) {
+        this.flags.put(name, value);
     }
 
-    public List<Bitmap> getImages() {
-        return images;
+    public Bitmap getImage(int index) {
+        return images.get(index);
     }
 
     public void setImages(List<Bitmap> images) {
         this.images = images;
     }
 
-    public List<Movie> getAnimations() {
-        return animations;
+    public Movie getAnimation(int index) {
+        return animations.get(index);
     }
 
     public void setAnimations(List<Movie> animations) {
         this.animations = animations;
     }
 
-    public List<MediaPlayer> getSounds() {
-        return sounds;
+    public MediaPlayer getSound(int index) {
+        return sounds.get(index);
     }
 
     public void setSounds(List<MediaPlayer> sounds) {
