@@ -21,7 +21,7 @@ public class GoToPageEffect implements Effect {
     }
 
     @Override
-    public Effect activate() {
+    public Effect activate(MediaData data) {
         return this;
     }
 }

@@ -40,7 +40,7 @@ public class ButtonElement implements Element {
                 &&(posY <= y)
                 &&(posX+width >= x)
                 &&(posY+height >= y)) {
-            return effect.activate();
+            return effect.activate(data);
         }
         return null;
     }

@@ -15,9 +15,13 @@ import com.g11.g11reader.backend.MediaData;
 public class AnimationElement implements Element {
     private int index;
     private long timepassed = 0;
+    private float x;
+    private float y;
 
-    public AnimationElement(int index) {
+    public AnimationElement(int index, float x, float y) {
         this.index = index;
+        this.x = x;
+        this.y = y;
     }
 
     @Override
@@ -29,8 +33,7 @@ public class AnimationElement implements Element {
     public void draw(Canvas canvas, MediaData data) {
         Movie movie = data.getAnimation(index);
         movie.setTime(((int)timepassed) % movie.duration());
-
-        //TODO draw movie
+        movie.draw(canvas, x, y);
 
         movie.setTime(0);
     }

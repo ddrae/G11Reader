@@ -8,5 +8,5 @@ import android.graphics.Canvas;
 
 public interface Effect {
     public void draw(Canvas canvas, MediaData data);
-    public Effect activate();
+    public Effect activate(MediaData data);
 }

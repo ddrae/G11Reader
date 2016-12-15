@@ -1,6 +1,7 @@
 package com.g11.g11reader.backend.effects;
 
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 
 import com.g11.g11reader.backend.Effect;
 import com.g11.g11reader.backend.MediaData;
@@ -10,15 +11,17 @@ import com.g11.g11reader.backend.MediaData;
  */
 
 public class PlaySoundEffect implements Effect {
-    //TODO implement
+    private int index;
 
     @Override
     public void draw(Canvas canvas, MediaData data) {
-
     }
 
     @Override
-    public Effect activate() {
+    public Effect activate(MediaData data) {
+        // Not sure if works or not
+        MediaPlayer mediaPlayer = data.getSound(index);
+        mediaPlayer.start();
         return null;
     }
 }
