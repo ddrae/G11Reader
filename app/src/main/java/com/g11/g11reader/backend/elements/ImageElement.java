@@ -33,7 +33,7 @@ public class ImageElement implements Element {
         // How do we set flags?
         Paint paint = new Paint();
 
-        // Will draw image upon image, use canvas.drawColor(Color.BLACK) to clear canvas. Most likely in... backend?
+        // Will draw image upon image, use canvas.drawColor(Color.BLACK) to clear canvas.
         canvas.drawBitmap(data.getImage(index), posX, posY, paint);
     }
 
