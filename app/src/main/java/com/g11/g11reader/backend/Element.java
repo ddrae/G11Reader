@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 
 public interface Element {
 
-    public void update(long dt, MediaData data);
+    public Effect update(long dt, MediaData data);
 
     public void draw(Canvas canvas, MediaData data);
 

@@ -26,7 +26,8 @@ public class ButtonElement implements Element {
     }
 
     @Override
-    public void update(long dt, MediaData data) {
+    public Effect update(long dt, MediaData data) {
+        return null;
     }
 
     @Override

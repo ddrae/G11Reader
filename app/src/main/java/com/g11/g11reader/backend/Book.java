@@ -42,7 +42,14 @@ public class Book {
 
     public synchronized void update(long dt) {
         Page page = pages.get(currentPage);
-        page.update(dt, data);
+        List<Effect> effects =  page.update(dt, data);
+        for(Effect e : effects) {
+            if(e instanceof GoToPageEffect) {
+                page.resetPage();
+                currentPage = ((GoToPageEffect) e).index;
+                page.update(0, data);
+            }
+        }
     }
 
     public synchronized void draw(Canvas canvas) {

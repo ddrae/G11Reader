@@ -144,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
         // while interacting with the UI.
         //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
+        //TODO Check permission on 23+
+
         updateFileList();
 
         Thread mainLoop = new MainLoop(this);
@@ -258,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         if(folder.listFiles()!=null) {
             File[] files = folder.listFiles(g11Filter);
             for (File f : files) {
-                listElements.add(f.getName().substring(0,-4));
+                listElements.add(f.getName());
             }
         }
 

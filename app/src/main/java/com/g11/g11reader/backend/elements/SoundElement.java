@@ -16,7 +16,8 @@ public class SoundElement implements Element {
     //TODO Implement
 
     @Override
-    public void update(long dt, MediaData data) {
+    public Effect update(long dt, MediaData data) {
+        return null;
     }
 
     @Override
