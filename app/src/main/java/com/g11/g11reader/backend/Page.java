@@ -16,10 +16,14 @@ public class Page {
         this.elements = elements;
     }
 
-    public void update(long dt, MediaData data) {
+    public List<Effect> update(long dt, MediaData data) {
+        List<Effect> effects = new ArrayList<>();
         for(Element e : elements) {
-            e.update(dt, data);
+            Effect eff = e.update(dt, data);
+            if(eff != null)
+                effects.add(eff);
         }
+        return effects;
     }
 
     public void draw(Canvas canvas, MediaData data) {

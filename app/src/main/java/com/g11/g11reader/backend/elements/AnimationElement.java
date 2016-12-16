@@ -25,8 +25,9 @@ public class AnimationElement implements Element {
     }
 
     @Override
-    public void update(long dt, MediaData data) {
+    public Effect update(long dt, MediaData data) {
         timepassed += dt;
+        return null;
     }
 
     @Override
