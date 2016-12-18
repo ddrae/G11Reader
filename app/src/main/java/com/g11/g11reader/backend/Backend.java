@@ -59,11 +59,11 @@ public class Backend {
     }
 
     public void swipedLeft() {
-        // Lets not implement this.
+        book.swipedLeft();
     }
 
     public void swipedRight() {
-        // Lets not implement this.
+        book.swipedRight();
     }
 
     public synchronized BackendState getState() {

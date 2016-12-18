@@ -2,6 +2,8 @@ package com.g11.g11reader.backend;
 
 import android.graphics.Canvas;
 
+import com.g11.g11reader.backend.elements.TimerElement;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,11 @@ public class Page {
     }
 
     public void resetPage() {
-        //TODO reset timers back to 0 and such.
+        for(Element e : elements) {
+            if(e instanceof TimerElement){
+                ((TimerElement) e).reset();
+            }
+        }
+        //todo should reset reset anything else than timer?
     }
 }

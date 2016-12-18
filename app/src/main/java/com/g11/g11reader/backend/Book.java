@@ -15,7 +15,6 @@ import java.util.List;
 public class Book {
     private List<Page> pages = new ArrayList<>();
     private MediaData data = new MediaData();
-
     private int currentPage = 0;
 
     // Demo constructor for testing purposes.
@@ -66,6 +65,24 @@ public class Book {
                 currentPage = ((GoToPageEffect) e).index;
                 page.update(0, data);
             }
+        }
+    }
+
+    public synchronized void swipedLeft(){
+        if(currentPage!=pages.size()){
+            Page page = pages.get(currentPage);
+            page.resetPage();
+            currentPage = currentPage+1;
+            page.update(0,data);
+        }
+    }
+
+    public synchronized void swipedRight(){
+        if(currentPage!=0){
+            Page page = pages.get(currentPage);
+            page.resetPage();
+            currentPage = currentPage-1;
+            page.update(0,data);
         }
     }
 }
