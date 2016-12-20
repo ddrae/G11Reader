@@ -30,11 +30,7 @@ public class ImageElement implements Element {
 
     @Override
     public void draw(Canvas canvas, MediaData data) {
-        // Paint paint = new Paint(data.getFlags()..);
-        // How do we set flags?
         Paint paint = new Paint();
-
-        // Will draw image upon image, use canvas.drawColor(Color.BLACK) to clear canvas.
         canvas.drawBitmap(data.getImage(index), posX, posY, paint);
     }
 

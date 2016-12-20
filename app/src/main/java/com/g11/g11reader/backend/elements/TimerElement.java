@@ -22,7 +22,6 @@ public class TimerElement implements Element {
     private Timer timer;
 
     public TimerElement(Effect effect, int seconds) {
-
         this.effect = effect;
         this.seconds = seconds;
         timer = new Timer();

@@ -19,7 +19,6 @@ public class PlaySoundEffect implements Effect {
 
     @Override
     public Effect activate(MediaData data) {
-        // Not sure if works or not
         MediaPlayer mediaPlayer = data.getSound(index);
         mediaPlayer.start();
         return null;
