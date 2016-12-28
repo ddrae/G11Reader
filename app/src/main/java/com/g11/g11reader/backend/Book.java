@@ -20,7 +20,7 @@ public class Book {
     // Demo constructor for testing purposes.
     public Book() {
         List<Element> elements = new ArrayList<>();
-        elements.add(new TextElement("En test text! \n Hello World!", 600, 600));
+        elements.add(new TextElement(600, 600, "En test text! \n Hello World!"));
         Page page = new Page(elements);
         pages.add(page);
 

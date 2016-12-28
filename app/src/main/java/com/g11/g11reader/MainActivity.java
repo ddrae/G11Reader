@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         if(folder.listFiles()!=null) {
             File[] files = folder.listFiles(g11Filter);
             for (File f : files) {
-                listElements.add(f.getName());
+                listElements.add(f.getName().substring(0, f.getName().length()-4));
             }
         }
 
@@ -382,7 +382,8 @@ public class MainActivity extends AppCompatActivity {
                     String path = Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_DOWNLOADS).toString() + "/" + item + ".g11";
                     File file = new File(path);
-                    Book book = BookLoader.loadBook(file);
+                    Book book = BookLoader.loadZipBook(file);
+                    //Book book = BookLoader.loadBook(file);
                     ma.setBackend(new Backend(book));
                 }
             }

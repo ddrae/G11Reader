@@ -20,7 +20,7 @@ public class TextElement implements Element {
     private int posX;
     private int posY;
 
-    public TextElement(String text, int posX, int posY) {
+    public TextElement(int posX, int posY, String text) {
         this.text = text;
         this.posX = posX;
         this.posY = posY;

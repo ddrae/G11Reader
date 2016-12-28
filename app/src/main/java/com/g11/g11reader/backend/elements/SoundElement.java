@@ -15,6 +15,10 @@ public class SoundElement implements Element {
 
     //TODO Implement
 
+    public SoundElement(int index) {
+        this.index = index;
+    }
+
     @Override
     public Effect update(long dt, MediaData data) {
         return null;

@@ -13,6 +13,10 @@ import com.g11.g11reader.backend.MediaData;
 public class PlaySoundEffect implements Effect {
     private int index;
 
+    public PlaySoundEffect(int index) {
+        this.index = index;
+    }
+
     @Override
     public void draw(Canvas canvas, MediaData data) {
     }
