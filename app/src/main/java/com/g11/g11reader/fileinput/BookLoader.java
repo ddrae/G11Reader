@@ -40,7 +40,7 @@ public class BookLoader {
     private BookLoader() {}
 
     public static Book loadBook(File file) {
-        /*List<Page> pages = new ArrayList<>();
+        List<Page> pages = new ArrayList<>();
         List<Bitmap> images = new ArrayList<>();
         List<Movie> animations = new ArrayList<>();
         List<MediaPlayer> sounds = new ArrayList<>();
@@ -49,7 +49,7 @@ public class BookLoader {
         data.setImages(images);
         data.setAnimations(animations);
         data.setSounds(sounds);
-        Book book = new Book(pages, data);*/
+        Book book = new Book(pages, data);
 
         cResourceManager l_resourceManager = new cResourceManager( file );
         l_resourceManager._addResourceLoader( new cResourceLoader_image() );
@@ -63,7 +63,13 @@ public class BookLoader {
         l_resourceManager._openStream();
         l_resourceManager._loadFile();
 
-        Book l_book = new Book( null, null );
+        cResource_text      l_text      = l_resourceManager._getResource( "text0" );
+        cResource_image     l_image     = l_resourceManager._getResource( "image0" );
+        //cResource_music     l_music     = l_resourceManager._getResource( "music0" );
+
+        images.add( l_image.m_image );
+
+        Book l_book = new Book( pages, data );
 
         return l_book;
     }
