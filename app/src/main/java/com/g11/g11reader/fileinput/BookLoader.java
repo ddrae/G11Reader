@@ -55,7 +55,7 @@ public class BookLoader {
         l_resourceManager._loadFile();
 
         // tillfälliga datacontainers
-        List<Page> pages = new ArrayList<>();
+        List<Page> pages;
         List<Bitmap> images = new ArrayList<>();
         List<Movie> animations = new ArrayList<>();
         List<MediaPlayer> sounds = new ArrayList<>();
