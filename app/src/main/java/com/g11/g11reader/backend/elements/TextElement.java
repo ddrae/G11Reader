@@ -35,7 +35,7 @@ public class TextElement implements Element {
     public void draw(Canvas canvas, MediaData data) {
         TextPaint textPaint = new TextPaint();
         textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(200);
+        textPaint.setTextSize(126);
         StaticLayout textLayout = new StaticLayout(text, textPaint, canvas.getWidth(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         canvas.save();
         canvas.translate(posX, posY);

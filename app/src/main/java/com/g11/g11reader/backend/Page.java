@@ -2,6 +2,7 @@ package com.g11.g11reader.backend;
 
 import android.graphics.Canvas;
 
+import com.g11.g11reader.backend.elements.SoundElement;
 import com.g11.g11reader.backend.elements.TimerElement;
 
 import java.util.ArrayList;
@@ -53,10 +54,15 @@ public class Page {
         return effects;
     }
 
-    public void resetPage() {
+    public void resetPage(MediaData data) {
         for(Element e : elements) {
             if(e instanceof TimerElement){
                 ((TimerElement) e).reset();
+            }
+        }
+        for(Element e : elements) {
+            if(e instanceof SoundElement){
+                ((SoundElement) e).reset(data);
             }
         }
         //todo should reset reset anything else than timer?

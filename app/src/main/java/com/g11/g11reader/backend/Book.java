@@ -44,7 +44,7 @@ public class Book {
         List<Effect> effects =  page.update(dt, data);
         for(Effect e : effects) {
             if(e instanceof GoToPageEffect) {
-                page.resetPage();
+                page.resetPage(data);
                 currentPage = ((GoToPageEffect) e).index;
                 page.update(0, data);
             }
@@ -61,7 +61,7 @@ public class Book {
         List<Effect> effects = page.pressed(x, y, data);
         for(Effect e : effects) {
             if(e instanceof GoToPageEffect) {
-                page.resetPage();
+                page.resetPage(data);
                 currentPage = ((GoToPageEffect) e).index;
                 page.update(0, data);
             }
@@ -71,7 +71,7 @@ public class Book {
     public synchronized void nextPage(){
         Page page = pages.get(currentPage);
         if(page.getNextPage()!=null){
-            page.resetPage();
+            page.resetPage(data);
             currentPage = page.getNextPage();
             page.update(0,data);
         }
@@ -80,7 +80,7 @@ public class Book {
     public synchronized void previousPage(){
         Page page = pages.get(currentPage);
         if(page.getPreviousPage()!=null){
-            page.resetPage();
+            page.resetPage(data);
             currentPage = page.getPreviousPage();
             page.update(0,data);
         }
