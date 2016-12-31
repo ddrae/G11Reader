@@ -66,6 +66,21 @@ public class ContentLoader {
         return result;
     }
 
+    public static List<Page> loadBook( cResourceManager rm ) {
+
+        List<Page> result = new ArrayList<>();
+
+        // skapa innehåll för sida
+        List<Element> pageContents = new ArrayList<>();
+        pageContents.add( new ImageElement( 0, 0, 0 ) );
+
+        // skapa sida i boken
+        Page l_page = new Page( pageContents );
+        result.add( l_page );
+
+        return result;
+    }
+
     private static Element loadAnimationElement(String[] elements) {
         try {
             Integer index = Integer.parseInt(elements[1]);

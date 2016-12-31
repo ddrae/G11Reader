@@ -40,17 +40,8 @@ public class BookLoader {
     private BookLoader() {}
 
     public static Book loadBook(File file) {
-        List<Page> pages = new ArrayList<>();
-        List<Bitmap> images = new ArrayList<>();
-        List<Movie> animations = new ArrayList<>();
-        List<MediaPlayer> sounds = new ArrayList<>();
 
-        MediaData data = new MediaData();
-        data.setImages(images);
-        data.setAnimations(animations);
-        data.setSounds(sounds);
-        Book book = new Book(pages, data);
-
+        // skapa resurshanteraren
         cResourceManager l_resourceManager = new cResourceManager( file );
         l_resourceManager._addResourceLoader( new cResourceLoader_image() );
         l_resourceManager._addResourceLoader( new cResourceLoader_interactiveElement() );
@@ -63,12 +54,26 @@ public class BookLoader {
         l_resourceManager._openStream();
         l_resourceManager._loadFile();
 
+        // tillfälliga datacontainers
+        List<Page> pages = new ArrayList<>();
+        List<Bitmap> images = new ArrayList<>();
+        List<Movie> animations = new ArrayList<>();
+        List<MediaPlayer> sounds = new ArrayList<>();
+
+        // kopiera data från resurshanteraren
         cResource_text      l_text      = l_resourceManager._getResource( "text0" );
         cResource_image     l_image     = l_resourceManager._getResource( "image0" );
         //cResource_music     l_music     = l_resourceManager._getResource( "music0" );
-
         images.add( l_image.m_image );
 
+        // skapa data-container
+        MediaData data = new MediaData();
+        data.setImages(images);
+        data.setAnimations(animations);
+        data.setSounds(sounds);
+
+        // skapa bok
+        pages = ContentLoader.loadBook( l_resourceManager );
         Book l_book = new Book( pages, data );
 
         return l_book;
