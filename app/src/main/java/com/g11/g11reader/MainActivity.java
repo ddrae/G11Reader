@@ -382,8 +382,8 @@ public class MainActivity extends AppCompatActivity {
                     String path = Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_DOWNLOADS).toString() + "/" + item + ".g11";
                     File file = new File(path);
-                    Book book = BookLoader.loadZipBook(file);
-                    //Book book = BookLoader.loadBook(file);
+                    //Book book = BookLoader.loadZipBook(file);
+                    Book book = BookLoader.loadBook(file);
                     ma.setBackend(new Backend(book));
                 }
             }
