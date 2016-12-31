@@ -40,7 +40,7 @@ public class BookLoader {
     private BookLoader() {}
 
     public static Book loadBook(File file) {
-        List<Page> pages = new ArrayList<>();
+        /*List<Page> pages = new ArrayList<>();
         List<Bitmap> images = new ArrayList<>();
         List<Movie> animations = new ArrayList<>();
         List<MediaPlayer> sounds = new ArrayList<>();
@@ -49,8 +49,23 @@ public class BookLoader {
         data.setImages(images);
         data.setAnimations(animations);
         data.setSounds(sounds);
-        Book book = new Book(pages, data);
-        return book;
+        Book book = new Book(pages, data);*/
+
+        cResourceManager l_resourceManager = new cResourceManager( file );
+        l_resourceManager._addResourceLoader( new cResourceLoader_image() );
+        l_resourceManager._addResourceLoader( new cResourceLoader_interactiveElement() );
+        l_resourceManager._addResourceLoader( new cResourceLoader_interactiveScreen() );
+        l_resourceManager._addResourceLoader( new cResourceLoader_music() );
+        l_resourceManager._addResourceLoader( new cResourceLoader_sound() );
+        l_resourceManager._addResourceLoader( new cResourceLoader_story() );
+        l_resourceManager._addResourceLoader( new cResourceLoader_storyScreen() );
+        l_resourceManager._addResourceLoader( new cResourceLoader_text() );
+        l_resourceManager._openStream();
+        l_resourceManager._loadFile();
+
+        Book l_book = new Book( null, null );
+
+        return l_book;
     }
 
     public static Book loadZipBook(File file) {
