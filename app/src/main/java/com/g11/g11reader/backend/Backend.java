@@ -59,11 +59,11 @@ public class Backend {
     }
 
     public void swipedLeft() {
-        book.swipedLeft();
+        book.nextPage();
     }
 
     public void swipedRight() {
-        book.swipedRight();
+        book.previousPage();
     }
 
     public synchronized BackendState getState() {

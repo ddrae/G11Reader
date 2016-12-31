@@ -1,6 +1,5 @@
 package com.g11.g11reader.fileinput;
 
-import com.g11.g11reader.backend.Book;
 import com.g11.g11reader.backend.Effect;
 import com.g11.g11reader.backend.Element;
 import com.g11.g11reader.backend.Page;
@@ -14,7 +13,6 @@ import com.g11.g11reader.backend.elements.TextElement;
 import com.g11.g11reader.backend.elements.TimerElement;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,33 +27,43 @@ public class ContentLoader {
     public static List<Page> loadBook(BufferedReader br) {
         List<Page> result = new ArrayList<>();
         List<Element> currentPage = new ArrayList<>();
+        Integer nextPage = null;
+        Integer previousPage = null;
 
         try{
             for(String line; (line = br.readLine()) != null; ) {
-                //String[] elements = line.split("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");
-                //String[] elements = line.split("\\s+");
                 String[] elements = line.split("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
                 if(line.startsWith("{")) {
                     currentPage = new ArrayList<>();
+                    nextPage = null;
+                    previousPage = null;
                 } else if(line.startsWith("}")) {
-                    result.add(new Page(currentPage));
+                    result.add(new Page(currentPage, nextPage, previousPage));
                 } else if(elements.length > 0) {
-                    for(String s : elements) {
-                        System.out.println(s);
-                    }
                     if(elements[0].equals("a")) {
                         currentPage.add(loadAnimationElement(elements));
                     } else if(elements[0].equals("b")) {
                         currentPage.add(loadButtonElement(elements));
                     } else if(elements[0].equals("i")) {
                         currentPage.add(loadImageElement(elements));
-                        System.out.println(currentPage.size());
                     } else if(elements[0].equals("s")) {
                         currentPage.add(loadSoundElement(elements));
                     } else if(elements[0].equals("tx")) {
                         currentPage.add(loadTextElement(elements));
                     } else if(elements[0].equals("ti")) {
                         currentPage.add(loadTimerElement(elements));
+                    } else if(elements[0].equals("n")) {
+                        try {
+                            nextPage = Integer.parseInt(elements[1]);
+                        } catch (Exception e) {
+                            nextPage = null;
+                        }
+                    } else if(elements[0].equals("p")) {
+                        try {
+                            previousPage = Integer.parseInt(elements[1]);
+                        } catch (Exception e) {
+                            previousPage = null;
+                        }
                     }
                 }
             }

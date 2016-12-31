@@ -14,8 +14,17 @@ import java.util.List;
 public class Page {
     private List<Element> elements;
 
+    private Integer nextPage;
+    private Integer previousPage;
+
     public Page(List<Element> elements) {
         this.elements = elements;
+    }
+
+    public Page(List<Element> elements, Integer next, Integer previous) {
+        this.elements = elements;
+        nextPage = next;
+        previousPage = previous;
     }
 
     public List<Effect> update(long dt, MediaData data) {
@@ -51,5 +60,13 @@ public class Page {
             }
         }
         //todo should reset reset anything else than timer?
+    }
+
+    public Integer getNextPage() {
+        return nextPage;
+    }
+
+    public Integer getPreviousPage() {
+        return previousPage;
     }
 }

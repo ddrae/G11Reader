@@ -68,20 +68,20 @@ public class Book {
         }
     }
 
-    public synchronized void swipedLeft(){
-        if(currentPage!=pages.size()){
-            Page page = pages.get(currentPage);
+    public synchronized void nextPage(){
+        Page page = pages.get(currentPage);
+        if(page.getNextPage()!=null){
             page.resetPage();
-            currentPage = currentPage+1;
+            currentPage = page.getNextPage();
             page.update(0,data);
         }
     }
 
-    public synchronized void swipedRight(){
-        if(currentPage!=0){
-            Page page = pages.get(currentPage);
+    public synchronized void previousPage(){
+        Page page = pages.get(currentPage);
+        if(page.getPreviousPage()!=null){
             page.resetPage();
-            currentPage = currentPage-1;
+            currentPage = page.getPreviousPage();
             page.update(0,data);
         }
     }
