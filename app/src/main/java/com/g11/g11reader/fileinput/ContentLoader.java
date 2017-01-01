@@ -5,6 +5,7 @@ import com.g11.g11reader.backend.Element;
 import com.g11.g11reader.backend.Page;
 import com.g11.g11reader.backend.effects.GoToPageEffect;
 import com.g11.g11reader.backend.effects.PlaySoundEffect;
+import com.g11.g11reader.backend.effects.QuitEffect;
 import com.g11.g11reader.backend.elements.AnimationElement;
 import com.g11.g11reader.backend.elements.ButtonElement;
 import com.g11.g11reader.backend.elements.ImageElement;
@@ -39,6 +40,7 @@ public class ContentLoader {
                     previousPage = null;
                 } else if(line.startsWith("}")) {
                     result.add(new Page(currentPage, nextPage, previousPage));
+                } else if(line.startsWith("//")) {
                 } else if(elements.length > 0) {
                     if(elements[0].equals("a")) {
                         currentPage.add(loadAnimationElement(elements));
@@ -137,7 +139,7 @@ public class ContentLoader {
         try {
             Integer x = Integer.parseInt(elements[1]);
             Integer y = Integer.parseInt(elements[2]);
-            String text = elements[3].substring(1).substring(0,elements[3].length()-2);
+            String text = elements[3];
             return new TextElement(x, y, text);
         } catch (Exception e) {
             return null;
@@ -158,6 +160,8 @@ public class ContentLoader {
         } else if(elements[offset].equals("s")) {
             Integer index = Integer.parseInt(elements[offset+1]);
             return new PlaySoundEffect(index);
+        } else if(elements[offset].equals("q")) {
+            return new QuitEffect();
         }
         throw new NullPointerException();
     }

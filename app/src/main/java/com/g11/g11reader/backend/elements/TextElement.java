@@ -21,7 +21,7 @@ public class TextElement implements Element {
     private int posY;
 
     public TextElement(int posX, int posY, String text) {
-        this.text = text;
+        this.text = text.replace("\\n", "\n");
         this.posX = posX;
         this.posY = posY;
     }
@@ -35,8 +35,8 @@ public class TextElement implements Element {
     public void draw(Canvas canvas, MediaData data) {
         TextPaint textPaint = new TextPaint();
         textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(126);
-        StaticLayout textLayout = new StaticLayout(text, textPaint, canvas.getWidth(), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        textPaint.setTextSize(32);
+        StaticLayout textLayout = new StaticLayout(text, textPaint, canvas.getWidth()-posX, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         canvas.save();
         canvas.translate(posX, posY);
         textLayout.draw(canvas);

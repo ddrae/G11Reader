@@ -8,8 +8,8 @@ import android.graphics.Canvas;
  */
 
 public class Backend {
-    private final static int SCREEN_WIDTH = 2560;
-    private final static int SCREEN_HEIGHT = 1600;
+    private final static int SCREEN_WIDTH = 1280;
+    private final static int SCREEN_HEIGHT = 800;
 
     private Bitmap currentFrame;
     private BackendState state;
