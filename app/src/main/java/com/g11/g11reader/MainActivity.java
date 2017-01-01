@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
         ListView listview = (ListView) findViewById(R.id.fileList);
 
         ArrayList<String> listElements = new ArrayList<>();
-        listElements.add("DEFAULT_TEST");
+        //listElements.add("DEFAULT_TEST");
 
         FilenameFilter g11Filter = new FilenameFilter() {
             @Override
