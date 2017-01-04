@@ -1,6 +1,7 @@
 package com.g11.g11reader.backend;
 
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 
 import com.g11.g11reader.backend.elements.SoundElement;
 import com.g11.g11reader.backend.elements.TimerElement;
@@ -17,18 +18,28 @@ public class Page {
 
     private Integer nextPage;
     private Integer previousPage;
+    private Integer music;
 
     public Page(List<Element> elements) {
         this.elements = elements;
     }
 
-    public Page(List<Element> elements, Integer next, Integer previous) {
+    public Page(List<Element> elements, Integer next, Integer previous, Integer music) {
         this.elements = elements;
         nextPage = next;
         previousPage = previous;
+        this.music = music;
     }
 
     public List<Effect> update(long dt, MediaData data) {
+        if(music!=null) {
+            MediaPlayer mp = data.getSound(music);
+            if(!mp.isPlaying()) {
+                mp.setLooping(true);
+                //mp.start();
+            }
+        }
+
         List<Effect> effects = new ArrayList<>();
         for(Element e : elements) {
             Effect eff = e.update(dt, data);
@@ -75,4 +86,6 @@ public class Page {
     public Integer getPreviousPage() {
         return previousPage;
     }
+
+    public Integer getMusic() { return music; }
 }

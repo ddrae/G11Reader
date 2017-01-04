@@ -30,6 +30,7 @@ public class ContentLoader {
         List<Element> currentPage = new ArrayList<>();
         Integer nextPage = null;
         Integer previousPage = null;
+        Integer music = null;
 
         try{
             for(String line; (line = br.readLine()) != null; ) {
@@ -38,8 +39,9 @@ public class ContentLoader {
                     currentPage = new ArrayList<>();
                     nextPage = null;
                     previousPage = null;
+                    music = null;
                 } else if(line.startsWith("}")) {
-                    result.add(new Page(currentPage, nextPage, previousPage));
+                    result.add(new Page(currentPage, nextPage, previousPage, music));
                 } else if(line.startsWith("//")) {
                 } else if(elements.length > 0) {
                     if(elements[0].equals("a")) {
@@ -65,6 +67,12 @@ public class ContentLoader {
                             previousPage = Integer.parseInt(elements[1]);
                         } catch (Exception e) {
                             previousPage = null;
+                        }
+                    } else if(elements[0].equals("m")) {
+                        try {
+                            music = Integer.parseInt(elements[1]);
+                        } catch (Exception e) {
+                            music = null;
                         }
                     }
                 }

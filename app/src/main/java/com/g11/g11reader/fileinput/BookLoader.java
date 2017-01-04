@@ -105,13 +105,19 @@ public class BookLoader {
                         Bitmap bitmap = BitmapFactory.decodeStream(zFile.getInputStream(entry));
                         imagesM.put(fileName, bitmap);
                     } else if ((fileName.endsWith(".mp3"))) {
+                        System.out.println(fileName);
                         InputStream in =  zFile.getInputStream(entry);
                         File tempFile = File.createTempFile(Integer.toString(fileName.hashCode()), ".mp3");
                         FileOutputStream out = new FileOutputStream(tempFile);
                         IOUtils.copy(in, out);
                         MediaPlayer mp = new MediaPlayer();
                         mp.setDataSource(tempFile.getPath());
-                        mp.prepare();
+                        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer mp) {
+                                mp.start();
+                            }
+                        });
                         soundsM.put(fileName, mp);
                     } else if (fileName.endsWith("content")) {
                         InputStream in =  zFile.getInputStream(entry);

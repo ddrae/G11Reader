@@ -46,7 +46,7 @@ public class Book {
             if(e instanceof GoToPageEffect) {
                 page.resetPage(data);
                 currentPage = ((GoToPageEffect) e).index;
-                page.update(0, data);
+                pages.get(currentPage).update(0, data);
             }
         }
     }
@@ -63,7 +63,7 @@ public class Book {
             if(e instanceof GoToPageEffect) {
                 page.resetPage(data);
                 currentPage = ((GoToPageEffect) e).index;
-                page.update(0, data);
+                pages.get(currentPage).update(0, data);
             }
         }
     }
@@ -73,7 +73,7 @@ public class Book {
         if(page.getNextPage()!=null){
             page.resetPage(data);
             currentPage = page.getNextPage();
-            page.update(0,data);
+            pages.get(currentPage).update(0,data);
         }
     }
 
@@ -82,7 +82,7 @@ public class Book {
         if(page.getPreviousPage()!=null){
             page.resetPage(data);
             currentPage = page.getPreviousPage();
-            page.update(0,data);
+            pages.get(currentPage).update(0,data);
         }
     }
 }

@@ -7,12 +7,16 @@ import com.g11.g11reader.backend.Effect;
 import com.g11.g11reader.backend.Element;
 import com.g11.g11reader.backend.MediaData;
 
+import java.io.IOException;
+
 /**
  * Created by A on 2016-12-04.
  */
 
 public class SoundElement implements Element {
     private int index;
+
+    private boolean hasPlayed = false;
 
     public SoundElement(int index) {
         this.index = index;
@@ -21,8 +25,9 @@ public class SoundElement implements Element {
     @Override
     public Effect update(long dt, MediaData data) {
         MediaPlayer mp = data.getSound(index);
-        if(!mp.isPlaying()) {
-            mp.start();
+        if(!hasPlayed) {
+            mp.prepareAsync();
+            hasPlayed = true;
         }
         return null;
     }
@@ -39,7 +44,6 @@ public class SoundElement implements Element {
     public void reset(MediaData data) {
         MediaPlayer mp = data.getSound(index);
         mp.stop();
-        mp.reset();
-        mp.stop();
+        hasPlayed = false;
     }
 }
