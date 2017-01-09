@@ -329,7 +329,8 @@ public class MainActivity extends AppCompatActivity {
         private MainActivity ma;
         private Display display;
 
-        private static final float minVel = 0;
+        private static final float minVel = 100;
+        private static final float minDis = 100;
 
         public MyGestureListener(MainActivity ma, Display display) {
             super();
@@ -343,10 +344,14 @@ public class MainActivity extends AppCompatActivity {
 
             Backend be = ma.getBackend();
             if(be != null) {
-                if(velocityX > minVel) {
-                    be.swipedRight();
-                } else if(velocityY < (-minVel)) {
-                    be.swipedLeft();
+                if(Math.abs(velocityX) > minVel) {
+                    if(event1.getX() - event2.getX() > minDis) {
+                        System.out.println("left");
+                        be.swipedLeft();
+                    } else if(event2.getX() - event1.getX() > minDis) {
+                        be.swipedRight();
+                        System.out.println("right");
+                    }
                 }
             }
             return true;
